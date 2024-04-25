@@ -3,9 +3,11 @@
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/ModuleSlotTracker.h"
+#include "llvm/IR/Value.h"
+#include "llvm/PassRegistry.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/raw_ostream.h"
-#include "llvm/PassRegistry.h"
+#include <cassert>
 
 #define PASS_NAME "ext-inst-analysis"
 #define PASS_DESCRIPTION "Find interget bit extension instructions"
@@ -32,6 +34,13 @@ void ExtInstAResult::print(llvm::raw_ostream &Os) const {
     Os << "ext instructions in \"" << Function->getName() << "\":\n";
     for (llvm::CastInst *extinst : SetOfExtInst) {
       extinst->print(Os, slotTracker);
+      Os << '\t';
+
+        extinst->getOperand(0)->print(Os, slotTracker);
+        Os << "  ";
+        assert(extinst->hasName());
+        Os << extinst->getDestTy() << "  ";
+        Os << extinst->getName();
       Os << '\n';
     }
   }
@@ -56,11 +65,8 @@ ExtInstAnalysis::run(llvm::Function &func,
   return result;
 }
 
-ExtInstAnalysisPrinter::ExtInstAnalysisPrinter(
-  llvm::raw_ostream& os)
-  : Os(os)
-{
-}
+ExtInstAnalysisPrinter::ExtInstAnalysisPrinter(llvm::raw_ostream &os)
+    : Os(os) {}
 
 llvm::PreservedAnalyses
 ExtInstAnalysisPrinter::run(llvm::Function &func,

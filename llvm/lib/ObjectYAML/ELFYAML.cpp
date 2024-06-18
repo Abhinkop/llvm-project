@@ -351,6 +351,7 @@ void ScalarEnumerationTraits<ELFYAML::ELF_EM>::enumeration(
   ECase(EM_56800EX);
   ECase(EM_AMDGPU);
   ECase(EM_RISCV);
+  ECase(EM_MY_RISCV);
   ECase(EM_LANAI);
   ECase(EM_BPF);
   ECase(EM_VE);
@@ -656,6 +657,15 @@ void ScalarBitSetTraits<ELFYAML::ELF_EF>::bitset(IO &IO,
       break;
     }
     break;
+  case ELF::EM_MY_RISCV:
+    BCase(EF_MY_RISCV_RVC);
+    BCaseMask(EF_MY_RISCV_FLOAT_ABI_SOFT, EF_MY_RISCV_FLOAT_ABI);
+    BCaseMask(EF_MY_RISCV_FLOAT_ABI_SINGLE, EF_MY_RISCV_FLOAT_ABI);
+    BCaseMask(EF_MY_RISCV_FLOAT_ABI_DOUBLE, EF_MY_RISCV_FLOAT_ABI);
+    BCaseMask(EF_MY_RISCV_FLOAT_ABI_QUAD, EF_MY_RISCV_FLOAT_ABI);
+    BCase(EF_MY_RISCV_RVE);
+    BCase(EF_MY_RISCV_TSO);
+    break;
   default:
     break;
   }
@@ -729,6 +739,7 @@ void ScalarEnumerationTraits<ELFYAML::ELF_SHT>::enumeration(
     ECase(SHT_MIPS_ABIFLAGS);
     break;
   case ELF::EM_RISCV:
+  case ELF::EM_MY_RISCV:
     ECase(SHT_RISCV_ATTRIBUTES);
     break;
   case ELF::EM_MSP430:
@@ -908,6 +919,9 @@ void ScalarEnumerationTraits<ELFYAML::ELF_REL>::enumeration(
   case ELF::EM_RISCV:
 #include "llvm/BinaryFormat/ELFRelocs/RISCV.def"
     break;
+  case ELF::EM_MY_RISCV:
+#include "llvm/BinaryFormat/ELFRelocs/MyRISCV.def"
+    break;
   case ELF::EM_LANAI:
 #include "llvm/BinaryFormat/ELFRelocs/Lanai.def"
     break;
@@ -999,6 +1013,7 @@ void ScalarEnumerationTraits<ELFYAML::ELF_DYNTAG>::enumeration(
 #define PPC64_DYNAMIC_TAG(name, value)
     break;
   case ELF::EM_RISCV:
+  case ELF::EM_MY_RISCV:
 #undef RISCV_DYNAMIC_TAG
 #define RISCV_DYNAMIC_TAG(name, value) DYNAMIC_TAG(name, value)
 #include "llvm/BinaryFormat/DynamicTags.def"
@@ -1285,6 +1300,8 @@ struct NormalizedOther {
       Map["STO_AARCH64_VARIANT_PCS"] = ELF::STO_AARCH64_VARIANT_PCS;
     if (EMachine == ELF::EM_RISCV)
       Map["STO_RISCV_VARIANT_CC"] = ELF::STO_RISCV_VARIANT_CC;
+    if (EMachine == ELF::EM_MY_RISCV)
+      Map["STO_MY_RISCV_VARIANT_CC"] = ELF::STO_MY_RISCV_VARIANT_CC;
     return Map;
   }
 

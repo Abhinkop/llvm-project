@@ -1271,6 +1271,8 @@ StringRef ELFObjectFile<ELFT>::getFileFormatName() const {
       return "elf32-loongarch";
     case ELF::EM_XTENSA:
       return "elf32-xtensa";
+    case ELF::EM_MY_RISCV:
+      return "elf32-myriscv";
     default:
       return "elf32-unknown";
     }
@@ -1300,6 +1302,9 @@ StringRef ELFObjectFile<ELFT>::getFileFormatName() const {
       return "elf64-ve";
     case ELF::EM_LOONGARCH:
       return "elf64-loongarch";
+    case ELF::EM_MY_RISCV:
+      report_fatal_error("My RISCV not implemented for 64 bit!");
+      return "elf32-myriscv";
     default:
       return "elf64-unknown";
     }
@@ -1403,6 +1408,17 @@ template <class ELFT> Triple::ArchType ELFObjectFile<ELFT>::getArch() const {
 
   case ELF::EM_XTENSA:
     return Triple::xtensa;
+  
+
+  case ELF::EM_MY_RISCV:
+    switch (EF.getHeader().e_ident[ELF::EI_CLASS]) {
+    case ELF::ELFCLASS32:
+      return Triple::myriscv32;
+    case ELF::ELFCLASS64:
+      report_fatal_error("My RISCV not implemented for 64 bit!");
+    default:
+      report_fatal_error("Invalid ELFCLASS!");
+    }
 
   default:
     return Triple::UnknownArch;

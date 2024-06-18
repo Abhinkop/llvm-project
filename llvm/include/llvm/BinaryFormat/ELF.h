@@ -320,6 +320,7 @@ enum {
   EM_VE = 251,            // NEC SX-Aurora VE
   EM_CSKY = 252,          // C-SKY 32-bit processor
   EM_LOONGARCH = 258,     // LoongArch
+  EM_MY_RISCV = 259,      // My RISCV (Using 259 instead of 243 as it is already defined.)
 };
 
 // Object file classes.
@@ -605,6 +606,34 @@ enum {
   ODK_GP_GROUP = 9,   // GP group to use for text/data sections
   ODK_IDENT = 10,     // ID information
   ODK_PAGESIZE = 11   // Page size information
+};
+
+// MY_RISCV Specific e_flags. These constants come from the "RISC-V ABIs Specification" pdf (version 1.0)
+// at https://wiki.riscv.org/display/HOME/RISC-V+Technical+Specifications Chapter 8.1 e_flags sub section.
+enum : unsigned {
+  EF_MY_RISCV_RVC = 0x0001,
+  EF_MY_RISCV_FLOAT_ABI = 0x0006,
+  EF_MY_RISCV_FLOAT_ABI_SOFT = 0x0000,
+  EF_MY_RISCV_FLOAT_ABI_SINGLE = 0x0002,
+  EF_MY_RISCV_FLOAT_ABI_DOUBLE = 0x0004,
+  EF_MY_RISCV_FLOAT_ABI_QUAD = 0x0006,
+  EF_MY_RISCV_RVE = 0x0008,
+  EF_MY_RISCV_TSO = 0x0010,
+};
+
+// MY_RISCV custom calling convention mask.
+// The highest bit is set if the std calling convention is not followed. 
+// reference: "RISC-V ABIs Specification" pdf (version 1.0) at 
+// https://wiki.riscv.org/display/HOME/RISC-V+Technical+Specifications Chapter 8.3 st_other 
+enum {
+  STO_MY_RISCV_VARIANT_CC = 0x80
+};
+
+// ELF Relocation types for MyRISCV
+// These constants come from the "RISC-V ABIs Specification" pdf (version 1.0)
+// at https://wiki.riscv.org/display/HOME/RISC-V+Technical+Specifications Chapter 8.4 Table 9. Relocation types
+enum {
+#include "ELFRelocs/MyRISCV.def"
 };
 
 // Hexagon-specific e_flags

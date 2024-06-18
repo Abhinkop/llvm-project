@@ -107,6 +107,7 @@ public:
     renderscript32, // 32-bit RenderScript
     renderscript64, // 64-bit RenderScript
     ve,             // NEC SX-Aurora Vector Engine
+    myriscv32,
     LastArchType = ve
   };
   enum SubArchType {
@@ -759,7 +760,7 @@ public:
   bool isPS5() const {
     return getArch() == Triple::x86_64 &&
       getVendor() == Triple::SCEI &&
-      getOS() == Triple::PS5;
+           getOS() == Triple::PS5;
   }
 
   /// Tests whether the target is the PS4 or PS5 platform.
@@ -1042,6 +1043,11 @@ public:
   /// Tests whether the target is eBPF.
   bool isBPF() const {
     return getArch() == Triple::bpfel || getArch() == Triple::bpfeb;
+  }
+
+  /// Tests whether the target is myRISV32.
+  bool ismyRISCV() const { 
+    return getArch() == Triple::myriscv32; 
   }
 
   /// Tests whether the target supports comdat

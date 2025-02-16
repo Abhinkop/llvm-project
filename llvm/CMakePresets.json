@@ -1,0 +1,45 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "ninja-debug",
+            "displayName": "Ninja - Debug",
+            "description": "Configure LLVM with Ninja generator in Debug mode",
+            "generator": "Ninja",
+            "binaryDir": "${sourceParentDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "LLVM_ENABLE_ASSERTIONS": "ON",
+                "LLVM_BUILD_TESTS": "ON",
+                "CLANG_BUILD_EXAMPLES": "OFF",
+                "LLVM_ENABLE_WERROR": "OFF",
+                "LLVM_ENABLE_LLD": "ON",
+                "LLVM_ENABLE_PROJECTS": "clang;llvm",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_C_COMPILER": "clang",
+                "LLVM_ENABLE_ZLIB": "FORCE_ON",
+                "LLVM_CCACHE_BUILD": "ON",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "LLVM_USE_SPLIT_DWARF": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug-build",
+            "hidden": false,
+            "configurePreset": "ninja-debug"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "ninja-test",
+            "hidden": false,
+            "description": "",
+            "displayName": "",
+            "configurePreset": "ninja-debug"
+        }
+    ]
+}
